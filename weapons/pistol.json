@@ -1,0 +1,17 @@
+{
+  "id": "pistol",
+  "weapon_type": "ranged",
+  "damage": 10,
+  "attack_speed": 4.5,
+  "crit_rate": 0.05,
+  "crit_damage": 1.5,
+  "attack_range": 360,
+  "knockback": 0,
+  "swing_arc": 0,
+  "max_targets": 1,
+  "pierce_walls": false,
+  "hit_delay": 0,
+  "bullet_speed": 450,
+  "magazine_size": 12,
+  "reload_seconds": 1.2
+}

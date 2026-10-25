@@ -16,3 +16,5 @@ hit_delay: 0         # 近战出手到结算伤害的延迟，秒
 bullet_speed: 450    # 子弹飞行速度，像素/秒
 magazine_size: 12    # 弹匣容量，发
 reload_seconds: 1.2  # 换弹时间，秒
+bullet_pierce: false # 子弹能不能穿透敌人（不穿墙）
+pierce_count: 0      # 最多穿透几只（穿透开时生效），0 = 不限

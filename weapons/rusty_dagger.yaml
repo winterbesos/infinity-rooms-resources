@@ -1,0 +1,15 @@
+# 锈蚀匕首（名称、格子、掉率在 items.json 里改）
+# 字段说明见 README.md；改完跑 tools/sync_resources.sh 同步进两个工程
+
+id: rusty_dagger     # 道具 id，必须和文件名一致
+weapon_type: melee   # melee 近战挥砍 / ranged 远程射击
+damage: 6            # 每一击（每发子弹）的伤害
+attack_speed: 2.2    # 每秒攻击次数，冷却 = 1 / 它
+crit_rate: 0.08      # 暴击率 0~1（暂未生效）
+crit_damage: 1.5     # 暴击倍率（暂未生效）
+attack_range: 18     # 近战够得着多远 / 子弹能飞多远，像素
+knockback: 0         # 击退力度（暂未生效）
+swing_arc: 50        # 近战扇形张角（整个扇面），度，0 = 一条直线
+max_targets: 1       # 近战一下最多同时打中几只
+pierce_walls: false  # 近战能不能隔墙打到
+hit_delay: 0.1       # 近战出手到结算伤害的延迟，秒

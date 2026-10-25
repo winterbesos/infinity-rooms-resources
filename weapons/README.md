@@ -1,6 +1,6 @@
 # 武器配置
 
-每把武器一个文件，文件名 = 道具 id（`pistol.json` 对应道具表里的 `pistol`）。
+每把武器一个 YAML 文件，文件名 = 道具 id（`pistol.yaml` 对应道具表里的 `pistol`）。
 这里是武器**战斗数值的唯一来源**：道具表 `items.json` 只管名称、描述、格子大小、掉率、售价，
 武器条目里就算还写着这些字段，游戏也会忽略、以这里为准。
 
@@ -13,8 +13,23 @@ infinity-rooms-client/tools/sync_resources.sh
 infinity-rooms-server/tools/sync_resources.sh
 ```
 
-脚本把 `weapons/*.json` 复制到各自的 `shared/weapons/`。两端数据必须一模一样，
+脚本把 `weapons/*.yaml` 复制到各自的 `shared/weapons/`。两端数据必须一模一样，
 不一样时客户端连服务端会在握手阶段被拒（提示道具数据不一致）。
+
+## 写法
+
+游戏自带的是一个**只认一层 `字段: 值`** 的精简 YAML 解析器：
+
+```yaml
+# 整行注释
+damage: 10           # 行尾注释（# 前面要有空格）
+weapon_type: ranged  # 不带引号的字符串
+pierce_walls: false  # true / false
+```
+
+- 值可以是整数、小数、`true`/`false`、字符串（加不加引号都行）。
+- **不支持**缩进嵌套、列表（`- x`、`[a, b]`）、多行字符串、同一个字段写两遍 ——
+  写了会在加载时报错并指出第几行，这把武器的数值不会生效。
 
 ## 字段
 

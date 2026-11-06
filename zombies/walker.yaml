@@ -1,25 +1,46 @@
-# 普通僵尸：慢吞吞地追人，打腿能把它打瘸
+# 普通僵尸：慢吞吞地追人，近了会冲、会扑；打腿能把它打瘸
 # 字段说明见 README.md；改完跑 tools/sync_resources.sh 同步进两个工程（也可以用内容工作台的「僵尸」页改）
 
 id: walker                # 僵尸 id，必须和文件名一致
-name: 普通僵尸            # 名称（控制台、调试信息里显示）
+name: 普通僵尸                # 名称
 
 # ── 基础 ──
 hp: 40                    # 血量
 speed: 30                 # 站着时的移速，像素/秒（玩家走路 80）
-radius: 6                 # 地面碰撞半径（挡路、贴身扣血的距离）
-damage: 8                 # 接触伤害
-touch_cd: 1.0             # 同一只两次接触伤害的间隔，秒
+radius: 6                 # 地面碰撞半径
+
+# ── 攻击：进了 attack_range 就站住抬手，attack_windup 秒后人还在 attack_reach 以内才扣 damage ──
+damage: 8                 # 攻击伤害
+attack_range: 14          # 多近开始抬手，像素
+attack_reach: 20          # 命中时多近算打中
+attack_windup: 0.45       # 抬手多久到命中时刻，秒
+attack_recover: 0.35      # 出手后站多久
+touch_cd: 1               # 两次攻击至少隔多久，秒
+
+# ── 冲刺（瘸了不冲）：sprint_range 0 = 不会冲 ──
+sprint_range: 110         # 多近开始冲
+sprint_speed: 70          # 冲刺速度
+sprint_time: 1.2          # 冲多久
+sprint_cd: 4              # 冷却
+
+# ── 扑（瘸了不扑）：原地蓄力，然后朝蓄力开始时人的方向直线飞，碰到人扣一次。pounce_range 0 = 不会扑 ──
+pounce_range: 50          # 多近开始扑（比攻击远）
+pounce_windup: 0.4        # 蓄力，秒
+pounce_speed: 160         # 扑的速度
+pounce_time: 0.35         # 飞多久，秒
+pounce_damage: 12         # 扑中伤害
+pounce_recover: 0.8       # 落地趴多久
+pounce_cd: 5              # 冷却
 
 # ── 刷怪（剩下的预算里和碎屑、别的僵尸按权重抢）──
-spawn_rooms: normal,elite,boss,final_boss  # 出现在哪些房型，逗号分隔
+spawn_rooms: normal,elite,boss,final_boss # 出现在哪些房型，逗号分隔
 spawn_min_day: 1          # 从第几天开始出现
 spawn_weight: 10          # 权重（碎屑是 10），0 = 不刷
 spawn_cost: 1.5           # 占多少预算（碎屑 1、重胎 2.5）
 
 # ── 部位伤害倍率（近战一律算身体）──
-head_mult: 2.0            # 爆头
-body_mult: 1.0
+head_mult: 2              # 爆头
+body_mult: 1
 legs_mult: 0.8
 
 # ── 站着时的判定框：像素，相对脚底，按朝右写（朝左自动镜像）──
@@ -41,7 +62,7 @@ legs_h: 10
 leg_threshold: 20
 crippled_speed: 12        # 瘸了之后的移速
 
-# ── 瘸腿后的判定框（趴着爬：头在前，腿拖在后面）──
+# ── 瘸腿后的判定框 ──
 crippled_head_x: 9
 crippled_head_y: 0
 crippled_head_w: 7
@@ -58,8 +79,7 @@ crippled_legs_h: 5
 # ── 动画（纯表现，服务端不读，不进哈希）。图集放在 zombies/walker/ 下 ──
 # 一张精灵表按 帧宽×帧高 切成 列×行 格，帧号从 0 起按行从左往右数；foot_x / foot_y 是帧里脚底那个像素
 # 每个动作一串帧序列："0-3"、"4,5,6,5"、"11-8"（倒放）。空 = 不用（待机空着就停在行走的第一帧）
-# 图集留空 = 还没有美术，游戏里用判定框画占位小人
-anim_file: walk.png
+anim_file: walk.png       # 图集
 anim_frame_w: 64
 anim_frame_h: 64
 anim_cols: 8
@@ -67,11 +87,19 @@ anim_rows: 16
 anim_foot_x: 32
 anim_foot_y: 63
 anim_faces_left: true     # 素材里的僵尸朝左画的就填 true
-anim_idle_frames: 0-4     # 站着不动
+anim_idle_frames: 0-4     # 待机
 anim_idle_fps: 4
-anim_walk_frames: 32-39   # 走
+anim_walk_frames: 32-39   # 行走
 anim_walk_fps: 8
-anim_crippled_idle_frames: "52" # 瘸了趴着不动
+anim_sprint_frames: 8-15  # 冲刺
+anim_sprint_fps: 14
+anim_attack_frames: 16-21 # 攻击
+anim_attack_fps: 10
+anim_pounce_frames: ""    # 扑
+anim_pounce_fps: 10
+anim_crippled_idle_frames: "52" # 瘸腿待机
 anim_crippled_idle_fps: 3
-anim_crippled_frames: 51,52 # 瘸了往前爬
+anim_crippled_frames: 51,52 # 瘸腿爬行
 anim_crippled_fps: 3
+anim_crippled_attack_frames: "" # 瘸腿攻击
+anim_crippled_attack_fps: 8
